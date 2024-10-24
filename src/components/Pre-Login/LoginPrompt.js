@@ -1,35 +1,16 @@
-import { Box, Button, Flex, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Input, Stack, } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const LoginPrompt = ({ setUser}) => {
+const LoginPrompt = ({setUser}) => {
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();
 
-  const handleLogin = (email, password) =>{
-    fetch(`http://localhost:8080/password/${email}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data === undefined || data.length == 0) {
-          setErrorMessage("We couldn't find an account under that email.");
-          return;
-        }
-        var u_pass = data[0].password;
-    
-        setErrorMessage("");
-        if (u_pass != password) {
-          console.log(u_pass);
-          setErrorMessage("Incorrect password. Please try again.");
-          return;
-        }
-    
-        setUser(email);
-        navigate("/home");
-        window.localStorage.setItem("isLoggedIn", true);
-      });
+  const handleLogin = (email) =>{
+    setUser(email);
+    navigate("/home");
+    window.localStorage.setItem("isLoggedIn", true)
   }
 
 
@@ -67,19 +48,13 @@ const LoginPrompt = ({ setUser}) => {
             placeholder="Password"
             variant="outline"
             focusBorderColor="orange.400"
-            onChange={(e) => setPassword(e.target.value)}
           />
-          {errorMessage && (
-            <Text color="red.500" fontSize="sm">
-              {errorMessage}
-            </Text>
-          )}
           <Button
             bg="orange.600"
             color="white"
             _hover={{ bg: "orange.500" }}
             size="lg"
-            onClick={() => handleLogin(email, password)}
+            onClick={() => handleLogin(email)}
           >
             LOGIN
           </Button>
