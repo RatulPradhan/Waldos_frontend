@@ -1,7 +1,29 @@
 import {Box, Flex, Text, Button, VStack, HStack, Avatar } from "@chakra-ui/react";
 import Sidebar from '../Navbar/Sidebar'
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Post from '../Post/Post';
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const [posts, setPosts] = useState([]);
+  
+  useEffect(() => {
+    // Fetch posts from the backend
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/posts"); 
+        const data = await response.json();
+        setPosts(data); 
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+  
+    fetchPosts(); 
+  }, []);
+
   return (
     <Flex height="100vh">
       <Sidebar />
@@ -26,7 +48,7 @@ const Home = () => {
           />
           <Box padding="0px 25px">
             <HStack>
-              <img src="/images/community-icon.png" width="75" />
+              <img src="/images/community-icon.png" width="75" alt="Community Icon"/>
               <Box>
                 <Text fontSize="3xl" fontWeight="bold">
                   Waldo's Community
@@ -41,7 +63,7 @@ const Home = () => {
         <Box mb="6" p="4" bg="#F6DEB5" shadow="sm" rounded="md">
           <Flex align="center">
             <Avatar size="md" mr="4" />
-            <Button w="full" colorScheme="orange" variant="outline">
+            <Button w="full" colorScheme="orange" variant="outline" onClick={() => navigate("/post")}>
               Share something with the community
             </Button>
           </Flex>
@@ -57,16 +79,16 @@ const Home = () => {
                 New posts
               </Text>
             </Flex>
-            <Box bg="gray.100" p="4" rounded="md">
-              <Text fontWeight="bold">Random Username</Text>
-              <Text color="gray.500">@admin</Text>
-              <Text fontSize="xl" mt="2">
-                Topic: New events!!
-              </Text>
-              <Text>
-                Waldo's is inviting you to be a part of this art community
-              </Text>
-            </Box>
+            
+            {/* Render posts */}
+            {posts.length > 0 ? (
+              posts.map(post => (
+                <Post key={post.post_id} post={post} /> // Pass each post to the Post component
+              ))
+            ) : (
+              <Text>No posts available yet</Text>
+            )}
+
           </Box>
 
           {/* Upcoming Events */}

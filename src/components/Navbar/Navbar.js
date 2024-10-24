@@ -7,7 +7,6 @@ const Navbar = ({username}) => {
 
   const logout = () =>{
     window.localStorage.removeItem("isLoggedIn")
-    window.localStorage.removeItem("userData")
     navigate("/")
     window.location.reload()
   }
