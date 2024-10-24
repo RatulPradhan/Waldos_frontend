@@ -3,6 +3,8 @@ import LoginPrompt from "./components/Pre-Login/LoginPrompt";
 import ProfilePage from "./components/Profile/ProfilePage";
 import Notifications from "./components/Notifications/Notifications";
 import Home from "./components/Home/Home";
+import PostForm from "./components/Post/PostForm";
+import PostDetails from "./components/Post/PostDetails"; 
 import { useState, useEffect } from "react";
 import PostForm from "./components/Post/PostForm";
 import PostDetails from "./components/Post/PostDetails";
@@ -63,6 +65,7 @@ function App() {
 			</Layout>
 		</BrowserRouter>
 	);
+
 }
 
 export default App;
