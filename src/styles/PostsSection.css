@@ -1,0 +1,71 @@
+/* Container for the posts section */
+.posts-section {
+    background-color: #F6DEB5; /* Matching the background color from the image */
+    padding: 20px;
+    border-radius: 10%;
+    color: #6a0202;
+    font-family: 'Petrona', serif;
+  }
+  
+  /* Styling for individual post */
+  .post {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+  }
+  
+  /* Avatar image styling */
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Circular avatar */
+    margin-right: 15px;
+  }
+  
+  /* Post content */
+  .post-content {
+    flex-grow: 1;
+  }
+  
+  /* Header content (username and admin role) */
+  .post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .username {
+    color: #6a0202;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .role {
+    color: #d69b75; /* Admin role color */
+    font-size: 0.9rem;
+    margin-left: 5px;
+  }
+  
+  /* Red dot next to admin role */
+  .post-dot {
+    font-size: 1.5rem;
+    color: red;
+    margin-left: 5px;
+  }
+  
+  /* Post title */
+  .post-title {
+    color: #6a0202;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  
+  /* Post description */
+  .post-description {
+    color: #6a0202;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+  

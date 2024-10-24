@@ -1,0 +1,39 @@
+/* Bio Section styling */
+    .bio-section {
+    background-color: #F6DEB5;
+    padding: 10px; 
+    border-radius: 10%; 
+    color: #6a0202; 
+    font-family: 'Petrona', serif; 
+    font-size: 1rem; 
+    width: 100%;
+    max-width: 220px; 
+    }
+  
+  /* Bio header styling */
+  .bio-header {
+    background-color: #dd907a; 
+    color: #6a0202; 
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  /* Bio content styling */
+  .bio-content {
+    color: #6a0202; 
+    margin-top: 10px;
+    font-weight: 400;
+    line-height: 1.4; 
+  }
+  
+  /* Joined date styling */
+  .bio-joined {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #6a0202;
+  }
+  

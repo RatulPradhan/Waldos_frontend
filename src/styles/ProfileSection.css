@@ -1,0 +1,56 @@
+/* Profile Section container */
+.profile-section {
+    width: 100%;
+    background-color: #f3e2c6;
+    padding: 0;
+    margin: 0;
+    border-radius: 8px;
+    position: relative; 
+    overflow: hidden; 
+  }
+  
+  /* Wallpaper background */
+  .profile-wallpaper {
+    background-size: cover;
+    background-position: center;
+    height: 110px; /* Reduce the height of the wallpaper */
+    position: relative;
+  }
+  
+  /* Avatar and profile details */
+  .profile-details {
+    position: absolute;
+    bottom: -40px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Avatar styling */
+  .profile-avatar {
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%;
+    border: 5px solid #f3e2c6; 
+    object-fit: cover; 
+    margin-right: 15px;
+  }
+  
+  /* Username styling */
+  .username {
+    color: #6a0202; 
+    font-family: 'Petrona', serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  /* Followers/Following styling */
+  .follow-info {
+    color: #333;
+    font-family: 'Petrona', serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+  

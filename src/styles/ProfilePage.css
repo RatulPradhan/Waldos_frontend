@@ -1,0 +1,32 @@
+.banner {
+    background-color: #FFF3E6;
+    height: 50px; 
+    padding: 0;
+    margin: 0; 
+}
+
+.main {
+    background-color: #F3E2C6;
+    min-height: 100vh;
+    padding-top: 0;
+    margin: 0;
+}
+
+.profile-section{
+    height: 200px;
+    border: 2px solid #d2aa64; /* Add a solid border with color */
+    border-radius: 10px; /* Rounded corners */
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+    overflow: hidden;
+    margin: 5;
+}
+
+.numb-of-posts{
+    color: #6a0202; 
+    font-family: 'Petrona', serif;
+    font-weight: 800;
+}
+
+.bio-section, .posts-section {
+    background-color: #F9D69A; 
+}
