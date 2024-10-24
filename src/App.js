@@ -16,6 +16,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setUserData(data);
+        window.localStorage.setItem("userData", JSON.stringify(data[0]));
       });
     }
   }, [email]);
@@ -32,7 +33,7 @@ function App() {
               login ? (
                 <Home />
               ) : (
-                <LoginPrompt setUser={(email) => setEmail(email)} />
+                <LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>
               )
             }
           />
