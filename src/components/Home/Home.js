@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Post from "../Post/Post";
 
-const Home = () => {
+const Home = ({ userData }) => {
 	const navigate = useNavigate();
 
 	const [posts, setPosts] = useState([]);
@@ -31,6 +31,21 @@ const Home = () => {
 
 		fetchPosts();
 	}, []);
+
+	// for updating and deleting the post section
+	const handleDelete = (postId) => {
+		setPosts((prevPosts) => prevPosts.filter((post) => post.post_id !== postId));
+	};
+	
+	// update post
+	const handleUpdate = (postId, title, content) => {
+		setPosts((prevPosts) =>
+		  prevPosts.map((post) =>
+			post.post_id === postId ? { ...post, title, content } : post
+		  )
+		);
+	};
+	
 
 	return (
 		<Flex height="100vh">
@@ -99,7 +114,12 @@ const Home = () => {
 						{/* Render posts */}
 						{posts.length > 0 ? (
 							posts.map((post) => (
-								<Post key={post.post_id} post={post} /> // Pass each post to the Post component
+								<Post key={post.post_id} 
+								      post={post} 
+									  userId={userData.user_id} 
+									  onDelete={handleDelete}
+									  onUpdate={handleUpdate} 
+								/> // pass the props the post component
 							))
 						) : (
 							<Text>No posts available yet</Text>

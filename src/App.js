@@ -34,7 +34,7 @@ function App() {
 						path="/"
 						element={
 							login ? (
-								<Home />
+								<Home userData={userData[0]} />
 							) : (
 								<LoginPrompt
 									setUser={(email) => setEmail(email)}
@@ -43,7 +43,7 @@ function App() {
 							)
 						}
 					/>
-					<Route path="/home" element={<Home />} />
+					<Route path="/home" element={<Home userData={userData[0]}/>} />
 					<Route
 						path="/post"
 						element={
