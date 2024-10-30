@@ -26,6 +26,15 @@ function App() {
 
 	const login = window.localStorage.getItem("isLoggedIn");
 
+	useEffect(() => {
+		const existingUserData = window.localStorage.getItem("userData");
+  		if (existingUserData) {
+			const data = JSON.parse(existingUserData);
+      		setUserData([data]);
+			console.log(userData);
+  		}
+	}, [])
+
 	return (
 		<BrowserRouter>
 			<Layout username={userData[0].username || ""}>
@@ -56,9 +65,13 @@ function App() {
 					<Route
 						path="/post/:post_id"
 						element={<PostDetails userId={userData[0].user_id} />}
+
 					/>
-					<Route path="/profile" element={<ProfilePage />} />
-					<Route path="/notifications" element={<Notifications />} />
+					<Route path="/home" element={login ? <Home /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/post" element={login ? <PostForm userId={userData[0].user_id} username={userData[0].username} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
+					<Route path="/post/:post_id" element={login ? <PostDetails userId={userData[0].user_id} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
+					<Route path="/profile" element={login ? <ProfilePage /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/notifications" element={login ? <Notifications /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 				</Routes>
 			</Layout>
 		</BrowserRouter>

@@ -12,8 +12,10 @@ import ProfileSection from "../Profile/ProfileSection";
 import BioSection from "../Profile/BioSection";
 import PostsSection from "../Profile/PostsSection";
 import Sidebar from "../Navbar/Sidebar";
+import CreateAnnouncement from "../Notifications/CreateAnnouncement";
 
 const ProfilePage = () => {
+  const isAdmin = JSON.parse(window.localStorage.getItem("userData")).user_type === 'admin'
   return (
     <Flex height="100vh">
       <Sidebar />
@@ -24,13 +26,13 @@ const ProfilePage = () => {
             <BioSection />
           </Box>
           <Box
-            w='80%'
+            w="80%"
             bg="#E1CBAA"
             borderRadius="md"
             boxShadow="md"
-            p={4} // Adds padding inside the box
+            p={4}
             border="1px"
-            borderColor="#d69b75" // Optional: Change border color to match your theme
+            borderColor="#d69b75"
           >
             <VStack spacing={4} align="stretch">
               <Box mb={4}>
@@ -46,6 +48,7 @@ const ProfilePage = () => {
             </VStack>
           </Box>
         </Flex>
+        {isAdmin && <CreateAnnouncement />}
       </Box>
     </Flex>
   );
