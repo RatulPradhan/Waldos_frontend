@@ -39,7 +39,33 @@ function App() {
 		<BrowserRouter>
 			<Layout username={userData[0].username || ""}>
 				<Routes>
-					<Route path="/" element={ login ? (<Home />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}
+					<Route
+						path="/"
+						element={
+							login ? (
+								<Home userData={userData[0]} />
+							) : (
+								<LoginPrompt
+									setUser={(email) => setEmail(email)}
+									userData={userData[0]}
+								/>
+							)
+						}
+					/>
+					<Route path="/home" element={<Home userData={userData[0]}/>} />
+					<Route
+						path="/post"
+						element={
+							<PostForm
+								userId={userData[0].user_id}
+								username={userData[0].username}
+							/>
+						}
+					/>
+					<Route
+						path="/post/:post_id"
+						element={<PostDetails userId={userData[0].user_id} />}
+
 					/>
 					<Route path="/home" element={login ? <Home /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/post" element={login ? <PostForm userId={userData[0].user_id} username={userData[0].username} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
