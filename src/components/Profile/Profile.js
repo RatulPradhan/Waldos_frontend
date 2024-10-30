@@ -6,11 +6,11 @@ import ProfileSection from "../Profile/ProfileSection";
 
 export default function Profile() {
   return (
-  <Flex height="100vh">
-    <Sidebar />
-    <BioSection />
-    <PostsSection />
-    <ProfileSection />
-  </Flex>
+    <Flex height="100vh">
+      <Sidebar />
+      <BioSection />
+      <PostsSection />
+      <ProfileSection />
+    </Flex>
   );
 };

@@ -11,6 +11,7 @@ import React from "react";
 import "../../styles/ProfileSection.css";
 
 const ProfileSection = () => {
+  const username = JSON.parse(window.localStorage.getItem("userData")).username;
   return (
     <Box
       bg="#F6DEB5"
@@ -33,7 +34,7 @@ const ProfileSection = () => {
           <img src="/images/avatar.jpg" width="75" className="profile-avatar" />
           <Box>
             <Text fontSize="3xl" fontWeight="bold">
-              Random Username
+              {username}
             </Text>
             <Text>1 Following · 3 Followers</Text>
           </Box>
