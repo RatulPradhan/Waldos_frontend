@@ -60,22 +60,23 @@ export default function Sidebar({userType}) {
         </Text>
         <VStack align="start" spacing="3" fontSize="lg">
           <Link to="/ceramic">
-            <HStack>
-              <FiCoffee />
-              <Text>Ceramic</Text>
-            </HStack>
+
+          <HStack>
+            <FiCoffee />
+            <Text>Ceramic</Text>
+          </HStack>
           </Link>
           <Link to="/printmaking">
-            <HStack>
-              <FiPrinter />
-              <Text>Printmaking</Text>
-            </HStack>
+          <HStack>
+            <FiPrinter />
+            <Text>Printmaking</Text>
+          </HStack>
           </Link>
           <Link to="/film">
-            <HStack>
-              <FiFilm />
-              <Text>Film</Text>
-            </HStack>
+          <HStack>
+            <FiFilm />
+            <Text>Film</Text>
+          </HStack>
           </Link>
         </VStack>
       </VStack>
