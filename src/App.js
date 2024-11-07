@@ -8,6 +8,7 @@ import PostDetails from "./components/Post/PostDetails";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
+import AdminTools from "./components/AdminTools/AdminTools";
 
 function App() {
 	const [userData, setUserData] = useState([{}]);
@@ -31,7 +32,6 @@ function App() {
   		if (existingUserData) {
 			const data = JSON.parse(existingUserData);
       		setUserData([data]);
-			console.log(userData);
   		}
 	}, [])
 
@@ -39,39 +39,20 @@ function App() {
 		<BrowserRouter>
 			<Layout username={userData[0].username || ""}>
 				<Routes>
-					<Route
-						path="/"
-						element={
-							login ? (
-								<Home userData={userData[0]} />
-							) : (
-								<LoginPrompt
-									setUser={(email) => setEmail(email)}
-									userData={userData[0]}
-								/>
-							)
-						}
-					/>
-					<Route path="/home" element={<Home userData={userData[0]}/>} />
-					<Route
-						path="/post"
-						element={
-							<PostForm
-								userId={userData[0].user_id}
-								username={userData[0].username}
-							/>
-						}
-					/>
+					<Route path="/"     element={ login ? (<Home userData={userData[0]} />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]} />)} />
+					<Route path="/home" element={ login ? (<Home userData={userData[0]} />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]} />)} />
+					<Route path="/post" element={ <PostForm userId={userData[0].user_id} username={userData[0].username} />}/>
 					<Route
 						path="/post/:post_id"
 						element={<PostDetails userId={userData[0].user_id} />}
 
 					/>
-					<Route path="/home" element={login ? <Home /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/post" element={login ? <PostForm userId={userData[0].user_id} username={userData[0].username} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
 					<Route path="/post/:post_id" element={login ? <PostDetails userId={userData[0].user_id} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
-					<Route path="/profile" element={login ? <ProfilePage /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
-					<Route path="/notifications" element={login ? <Notifications /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/profile" element={login ? <ProfilePage userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/notifications" element={login ? <Notifications userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/admin-tools" element={login ? <AdminTools userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} /> 
+				
 				</Routes>
 			</Layout>
 		</BrowserRouter>

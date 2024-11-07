@@ -45,11 +45,13 @@ const Home = ({ userData }) => {
 		  )
 		);
 	};
+
+	console.log(userData)
 	
 
 	return (
 		<Flex height="100vh">
-			<Sidebar />
+			<Sidebar userType={userData.user_type}/>
 			{/* Main Content */}
 			<Box flex="1" p="5" height="100%" overflowY="auto">
 				{/* Header */}
