@@ -11,10 +11,12 @@ import {
   FiCoffee,
   FiFilm,
   FiPrinter,
+  FiCpu,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({userType}) {
+  const isAdmin = userType === "admin";
   return (
     <Box
       as="nav"
@@ -40,11 +42,17 @@ export default function Sidebar() {
             </HStack>
           </Link>
           <Link to="/profile">
-          <HStack>
-            <FiUser />
-            <Text>My profile</Text>
-          </HStack>
+            <HStack>
+              <FiUser />
+              <Text>My profile</Text>
+            </HStack>
           </Link>
+          {isAdmin && (<Link to="/admin-tools">
+            <HStack>
+              <FiCpu />
+              <Text>Admin Tools</Text>
+            </HStack>
+          </Link>)}
         </VStack>
 
         <Text mt="10" fontWeight="bold" fontSize="xl">
@@ -52,6 +60,7 @@ export default function Sidebar() {
         </Text>
         <VStack align="start" spacing="3" fontSize="lg">
           <Link to="/ceramic">
+
           <HStack>
             <FiCoffee />
             <Text>Ceramic</Text>
