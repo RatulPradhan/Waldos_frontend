@@ -2,10 +2,7 @@ import {
   Box,
   Flex,
   Text,
-  Button,
   VStack,
-  HStack,
-  Avatar,
 } from "@chakra-ui/react";
 import React from "react";
 import ProfileSection from "../Profile/ProfileSection";
@@ -14,11 +11,11 @@ import PostsSection from "../Profile/PostsSection";
 import Sidebar from "../Navbar/Sidebar";
 import CreateAnnouncement from "../Notifications/CreateAnnouncement";
 
-const ProfilePage = () => {
+const ProfilePage = ({userData}) => {
   const isAdmin = JSON.parse(window.localStorage.getItem("userData")).user_type === 'admin'
   return (
     <Flex height="100vh">
-      <Sidebar />
+      <Sidebar userType={userData.user_type} />
       <Box flex="1" p="5" height="100%" overflowY="auto">
         <ProfileSection />
         <Flex>
@@ -48,7 +45,6 @@ const ProfilePage = () => {
             </VStack>
           </Box>
         </Flex>
-        {isAdmin && <CreateAnnouncement />}
       </Box>
     </Flex>
   );

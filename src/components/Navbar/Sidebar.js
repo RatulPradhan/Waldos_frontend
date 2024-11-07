@@ -11,10 +11,12 @@ import {
   FiCoffee,
   FiFilm,
   FiPrinter,
+  FiCpu,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({userType}) {
+  const isAdmin = userType === "admin";
   return (
     <Box
       as="nav"
@@ -40,29 +42,41 @@ export default function Sidebar() {
             </HStack>
           </Link>
           <Link to="/profile">
-          <HStack>
-            <FiUser />
-            <Text>My profile</Text>
-          </HStack>
+            <HStack>
+              <FiUser />
+              <Text>My profile</Text>
+            </HStack>
           </Link>
+          {isAdmin && (<Link to="/admin-tools">
+            <HStack>
+              <FiCpu />
+              <Text>Admin Tools</Text>
+            </HStack>
+          </Link>)}
         </VStack>
 
         <Text mt="10" fontWeight="bold" fontSize="xl">
           Channels
         </Text>
         <VStack align="start" spacing="3" fontSize="lg">
-          <HStack>
-            <FiCoffee />
-            <Text>Ceramic</Text>
-          </HStack>
-          <HStack>
-            <FiPrinter />
-            <Text>Printmaking</Text>
-          </HStack>
-          <HStack>
-            <FiFilm />
-            <Text>Film</Text>
-          </HStack>
+          <Link to="/ceramic">
+            <HStack>
+              <FiCoffee />
+              <Text>Ceramic</Text>
+            </HStack>
+          </Link>
+          <Link to="/printmaking">
+            <HStack>
+              <FiPrinter />
+              <Text>Printmaking</Text>
+            </HStack>
+          </Link>
+          <Link to="/film">
+            <HStack>
+              <FiFilm />
+              <Text>Film</Text>
+            </HStack>
+          </Link>
         </VStack>
       </VStack>
     </Box>
