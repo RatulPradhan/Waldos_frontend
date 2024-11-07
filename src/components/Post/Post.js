@@ -1,7 +1,22 @@
-import { Box, Text, HStack, Button, Avatar, Input, Textarea, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react"; 
+import {
+  Box,
+  Text,
+  HStack,
+  Button,
+  Avatar,
+  Input,
+  Textarea,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { FiMoreHorizontal } from 'react-icons/fi'; // Import the icon for the menu button
 import React, { useState } from "react"; // Import useState from React
 import { useNavigate } from 'react-router-dom';
+import ReportForm from './ReportForm';
 
 const Post = ({ post, userId, onDelete, onUpdate  }) => {
   // random like for now
@@ -62,6 +77,9 @@ const Post = ({ post, userId, onDelete, onUpdate  }) => {
       console.error("Error deleting post:", err);
     }
   };
+
+  //update report form
+  const { isOpen, onOpen, onClose } = useDisclosure();
     
   return (
     <Box bg="gray.100" p="4" rounded="md" mb="4" position="relative">
@@ -83,10 +101,17 @@ const Post = ({ post, userId, onDelete, onUpdate  }) => {
               <MenuItem onClick={handleDelete} color="red.500">Delete</MenuItem>
             </>
           ) : (
-            <MenuItem>Report</MenuItem>
+            <MenuItem onClick={onOpen} >Report</MenuItem>
           )}
         </MenuList>
       </Menu>
+
+      <ReportForm
+        isOpen={isOpen}
+        onClose={onClose}
+        postId={post.post_id}
+        reportedBy={userId}
+      />
 
       {/* Post Header */}
       <HStack align="center" mb="4">
