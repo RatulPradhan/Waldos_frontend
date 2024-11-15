@@ -16,20 +16,41 @@ const LoginPrompt = ({ setUser }) => {
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
 
+	const checkBan = (email) => {
+		fetch(`http://localhost:8080/banned_users`)
+		.then((response) => response.json())
+		.then((data) => {
+			if(data[0]){
+				const bannedUsers = data[0]
+				console.log("Right here")
+				console.log(Object.values(bannedUsers).includes(email));
+				console.log(email)
+				return Object.values(bannedUsers).includes(email);
+			}
+		})
+	}
+
 	const handleLogin = (email, password) => {
-		fetch(`http://localhost:8080/password/${email}`)
+		fetch(`http://localhost:8080/user/${email}`)
 			.then((response) => response.json())
 			.then((data) => {
-				if (data === undefined || data.length == 0) {
+				if (data === undefined || data.length === 0) {
 					setErrorMessage("We couldn't find an account under that email.");
 					return;
 				}
 				var u_pass = data[0].password;
+				var u_email = data[0].email;
 
 				setErrorMessage("");
-				if (u_pass != password) {
-					console.log(u_pass);
+				if (u_pass !== password) {
 					setErrorMessage("Incorrect password. Please try again.");
+					return;
+				}
+
+				console.log("lalalalala" + checkBan(u_email))
+				if(checkBan(u_email)){
+					console.log("Wow I am in here.")
+					setErrorMessage("This account is banned.");
 					return;
 				}
 

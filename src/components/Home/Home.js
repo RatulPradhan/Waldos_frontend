@@ -11,6 +11,7 @@ import Sidebar from "../Navbar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Post from "../Post/Post";
+import EventsSection from "../EventsSection/EventsSection";
 
 const Home = ({ userData, userRole }) => {
 	const navigate = useNavigate();
@@ -130,39 +131,7 @@ const Home = ({ userData, userRole }) => {
 					</Box>
 
 					{/* Upcoming Events */}
-					<Box w="30%" bg="#F6DEB5" shadow="sm" rounded="md" p="4">
-						<Text fontWeight="bold" mb="4">
-							Upcoming Events
-						</Text>
-						<VStack align="start" spacing="4">
-							<Box
-								textAlign="center"
-								w="full"
-								bg="orange.400"
-								color="white"
-								p="3"
-								rounded="md"
-							>
-								<Text fontWeight="bold" fontSize="2xl">
-									Sep 25
-								</Text>
-								<Text>Waldo's Friendraiser</Text>
-							</Box>
-							<Box
-								textAlign="center"
-								w="full"
-								bg="orange.400"
-								color="white"
-								p="3"
-								rounded="md"
-							>
-								<Text fontWeight="bold" fontSize="2xl">
-									Sep 25
-								</Text>
-								<Text>Waldo's Friendraiser</Text>
-							</Box>
-						</VStack>
-					</Box>
+					<EventsSection />
 				</Flex>
 			</Box>
 		</Flex>

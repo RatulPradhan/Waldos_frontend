@@ -4,7 +4,6 @@ import {
   Text,
   VStack,
   Button,
-  Input,
   HStack,
   List,
   ListItem,
@@ -14,9 +13,10 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../Navbar/Sidebar";
 import CreateAnnouncement from "../Notifications/CreateAnnouncement";
 import CreateEvent from "../Notifications/CreateEvent"
+import ReportReview from "./ReportReview";
 
 const AdminTools = ({ userData }) => {
-  const [userToBan, setUserToBan] = useState("");
+  // const [userToBan, setUserToBan] = useState("");
   const [bannedUsers, setBannedUsers] = useState([]);
   const [unbannedUsers, setUnbannedUsers] = useState([]);
   const toast = useToast();
@@ -31,7 +31,7 @@ const AdminTools = ({ userData }) => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/users`)
+    fetch(`http://localhost:8080/unbanned_users`)
       .then((response) => response.json())
       .then((data) => {
         const emails = data.map((userEmail) => userEmail.email);
@@ -40,7 +40,7 @@ const AdminTools = ({ userData }) => {
   }, []);
 
 
-  const handleBanUser = async () => {
+  const handleBanUser = async (userToBan) => {
     if (userToBan) {
       // Check if user exists in the user table
       if (!unbannedUsers.includes(userToBan)) {
@@ -67,8 +67,9 @@ const AdminTools = ({ userData }) => {
         }
 
         // If ban was successful, update the banned users list and clear the input
+        setUnbannedUsers(unbannedUsers.filter((unbannedUser) => unbannedUser !== userToBan));
         setBannedUsers([...bannedUsers, userToBan]);
-        setUserToBan(""); // Clear input
+        // setUserToBan(""); // Clear input
         toast({
           title: `User ${userToBan} banned successfully.`,
           status: "success",
@@ -112,6 +113,7 @@ const AdminTools = ({ userData }) => {
 
       // If unban was successful, update the banned users list and show success message
       setBannedUsers(bannedUsers.filter((bannedUser) => bannedUser !== user));
+      setUnbannedUsers([...unbannedUsers, user]);
       toast({
         title: `User ${user} unbanned successfully.`,
         status: "info",
@@ -149,7 +151,6 @@ const AdminTools = ({ userData }) => {
           </Box>
 
           {/* Events Section */}
-          {/* Events Section */}
           <Box
             bg="#E1CBAA"
             borderRadius="md"
@@ -176,36 +177,89 @@ const AdminTools = ({ userData }) => {
             <Text fontSize="1.5rem" mb={4} color="#6a0202">
               Ban Users
             </Text>
-            <HStack>
-              <Input
-                placeholder="Enter username or ID"
-                value={userToBan}
-                onChange={(e) => setUserToBan(e.target.value)}
-              />
-              <Button colorScheme="red" onClick={handleBanUser}>
-                Ban User
-              </Button>
-            </HStack>
-            <List mt={4} spacing={3}>
-              {bannedUsers.length > 0 ? (
-                bannedUsers.map((user, index) => (
-                  <ListItem key={index}>
-                    <HStack justify="space-between">
-                      <Text>{user}</Text>
-                      <Button
-                        size="sm"
-                        colorScheme="orange"
-                        onClick={() => handleUnbanUser(user)}
-                      >
-                        Unban
-                      </Button>
-                    </HStack>
-                  </ListItem>
-                ))
-              ) : (
-                <Text>No banned users currently.</Text>
-              )}
-            </List>
+
+            {/* Unbanned Users Section */}
+            <Box>
+              <Text fontSize="1.25rem" mb={2} color="#2a4d69">
+                Current Users
+              </Text>
+              <List
+                mt={2}
+                spacing={3}
+                maxHeight="200px"
+                overflowY="auto"
+                p={2}
+                border="1px solid"
+                borderColor="#d69b75"
+                borderRadius="md"
+              >
+                {unbannedUsers.length > 0 ? (
+                  unbannedUsers.map((user, index) => (
+                    <ListItem key={index}>
+                      <HStack justify="space-between">
+                        <Text>{user}</Text>
+                        <Button
+                          size="sm"
+                          colorScheme="orange"
+                          onClick={() => handleBanUser(user)}
+                        >
+                          Ban
+                        </Button>
+                      </HStack>
+                    </ListItem>
+                  ))
+                ) : (
+                  <Text>No unbanned users currently.</Text>
+                )}
+              </List>
+            </Box>
+
+            {/* Banned Users Section */}
+            <Box mt={6}>
+              <Text fontSize="1.25rem" mb={2} color="#9b2c2c">
+                Banned Users
+              </Text>
+              <List
+                mt={2}
+                spacing={3}
+                maxHeight="200px"
+                overflowY="auto"
+                p={2}
+                border="1px solid"
+                borderColor="#d69b75"
+                borderRadius="md"
+              >
+                {bannedUsers.length > 0 ? (
+                  bannedUsers.map((user, index) => (
+                    <ListItem key={index}>
+                      <HStack justify="space-between">
+                        <Text>{user}</Text>
+                        <Button
+                          size="sm"
+                          colorScheme="red"
+                          onClick={() => handleUnbanUser(user)}
+                        >
+                          Unban
+                        </Button>
+                      </HStack>
+                    </ListItem>
+                  ))
+                ) : (
+                  <Text>No banned users currently.</Text>
+                )}
+              </List>
+            </Box>
+          </Box>
+
+          <Box
+            bg="#E1CBAA"
+            borderRadius="md"
+            boxShadow="md"
+            p={4}
+            border="1px"
+            borderColor="#d69b75"
+          >
+            <ReportReview />
           </Box>
         </VStack>
       </Box>
