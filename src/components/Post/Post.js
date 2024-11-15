@@ -1,28 +1,60 @@
 import {
-	Box,
-	Text,
-	HStack,
-	Button,
-	Avatar,
-	Input,
-	Textarea,
-	IconButton,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	useDisclosure,
+  Box,
+  Text,
+  HStack,
+  Button,
+  Avatar,
+  Input,
+  Textarea,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure
 } from "@chakra-ui/react";
-import { FiMoreHorizontal } from "react-icons/fi"; // Import the icon for the menu button
-import React, { useState } from "react"; // Import useState from React
-import { useNavigate } from "react-router-dom";
-import ReportForm from "./ReportForm";
+import { FiMoreHorizontal } from 'react-icons/fi'; // Import the icon for the menu button
+import React, { useState, useEffect, useCallback } from "react"; // Import useState from React
+import { useNavigate } from 'react-router-dom';
+import ReportForm from './ReportForm';
+import LikeList from '../Like/LikeList';
 
-const Post = ({ post, userId, onDelete, onUpdate }) => {
-	// random like for now
-	const navigate = useNavigate();
+const Post = ({ post, userId, onDelete, onUpdate, userRole  }) => {
+  // random like for now
+  const navigate = useNavigate(); 
 
-	const randomLikes = Math.floor(Math.random() * 100);
+  // like related things
+  const [likeCount, setLikeCount] = useState(post.like_count || 0);
+  const [likedByUsers, setLikedByUsers] = useState([]);  // Initialize as empty array
+  const [isLikeModalOpen, setLikeModalOpen] = useState(false);
+
+  // Fetch the like count and liked users when the component mounts
+  const fetchLikes = useCallback(async () => {
+    const response = await fetch(`http://localhost:8080/api/postLikes/${post.post_id}`);
+    if (response.ok) {
+      const data = await response.json();
+      setLikeCount(data.like_count);
+      setLikedByUsers(data.liked_by_users || []); // Ensure this is always an array
+    }
+  }, [post.post_id]);
+
+  useEffect(() => {
+    fetchLikes();
+  }, [fetchLikes]);
+
+  const handleLikePost = async () => {
+    const response = await fetch(`http://localhost:8080/api/likePost`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ post_id: post.post_id, user_id: userId }),
+    });
+
+    if (response.ok) {
+      await fetchLikes(); // Refresh the like count and liked users after a like action
+    } else {
+      console.error("Failed to like post");
+    }
+  };
 
 	const goToPostDetails = () => {
 		navigate(`/post/${post.post_id}`);
@@ -84,8 +116,35 @@ const Post = ({ post, userId, onDelete, onUpdate }) => {
 		}
 	};
 
-	//update report form
-	const { isOpen, onOpen, onClose } = useDisclosure();
+
+  //update report form
+  const { isOpen, onOpen, onClose } = useDisclosure();
+    
+  return (
+    <Box bg="gray.100" p="4" rounded="md" mb="4" position="relative">
+      
+      <Menu>
+        <MenuButton
+          as={IconButton}
+          icon={<FiMoreHorizontal />}
+          variant="ghost"
+          position="absolute"
+          top="4"
+          right="4"   
+          aria-label="Options"
+        />
+        <MenuList>
+          {(userId === post.user_id || userRole === 'admin') && (
+            <MenuItem onClick={handleDelete} color="red.500">Delete</MenuItem>
+          )}
+          {(userId === post.user_id) && (
+            <MenuItem onClick={() => setIsEditing(true)}>Edit</MenuItem>
+          )}
+          {(userId !== post.user_id && userRole !== 'admin') && (
+            <MenuItem onClick={onOpen}>Report</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
 
 	return (
 		<Box bg="gray.100" p="4" rounded="md" mb="4" position="relative">
@@ -150,34 +209,36 @@ const Post = ({ post, userId, onDelete, onUpdate }) => {
 				</>
 			)}
 
-			{/* Likes and Comments */}
-			<HStack justify="space-between">
-				<HStack>
-					<Button size="sm" variant="ghost">
-						❤️ {randomLikes}
-					</Button>
-					<Button size="sm" variant="ghost" onClick={goToPostDetails}>
-						💬 {post.comment_count || 0}
-					</Button>
-				</HStack>
-				<Text fontSize="sm" color="gray.500">
-					{new Date(post.created_at).toLocaleDateString()}
-				</Text>
-			</HStack>
+      {/* Likes and Comments */}
+      <HStack justify="space-between">
+        <HStack>
+          {/* Like Button - Opens LikeList on count click */}
+          <Button size="sm" variant="ghost" onClick={handleLikePost}>❤️ {likeCount}</Button>
+          <Button size="sm" variant="ghost" onClick={() => setLikeModalOpen(true)}>View Likes</Button>
+          <Button size="sm" variant="ghost" onClick={goToPostDetails}>💬 {post.comment_count || 0}</Button>
+        </HStack>
+        <Text fontSize="sm" color="gray.500">
+          {new Date(post.updated_at).toLocaleDateString()}
+        </Text>
+      </HStack>
 
-			{/* Save and Cancel buttons for Edit Mode */}
-			{isEditing && (
-				<HStack mt="4" spacing="4">
-					<Button colorScheme="blue" size="sm" onClick={handleSave}>
-						Save
-					</Button>
-					<Button variant="ghost" size="sm" onClick={handleEditToggle}>
-						Cancel
-					</Button>
-				</HStack>
-			)}
-		</Box>
-	);
+      {/* LikeList Modal */}
+      <LikeList
+        isOpen={isLikeModalOpen}
+        onClose={() => setLikeModalOpen(false)}
+        likedByUsers={likedByUsers} // Pass likedByUsers directly
+      />
+
+      {/* Save and Cancel buttons for Edit Mode */}
+      {isEditing && (
+        <HStack mt="4" spacing="4">
+          <Button colorScheme="blue" size="sm" onClick={handleSave}>Save</Button>
+          <Button variant="ghost" size="sm" onClick={handleEditToggle}>Cancel</Button>
+        </HStack>
+      )}
+      
+    </Box>
+  );
 };
 
 export default Post;
