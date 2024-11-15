@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Post from "../Post/Post";
 
-const Ceramic = ({ userData }) => {
+const Ceramic = ({ userData, userRole }) => {
 	const navigate = useNavigate();
 
 	const [posts, setPosts] = useState([]);
@@ -116,9 +116,10 @@ const Ceramic = ({ userData }) => {
 							posts.map((post) => (
 								<Post key={post.post_id} 
 								      post={post} 
-									    userId={userData.user_id} 
-									    onDelete={handleDelete}
-									    onUpdate={handleUpdate} 
+									  userId={userData.user_id} 
+									  onDelete={handleDelete}
+									  onUpdate={handleUpdate} 
+									  userRole={userRole}
 								/> 
 							))
 						) : (

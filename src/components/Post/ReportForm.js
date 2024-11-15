@@ -13,12 +13,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-const ReportForm = ({ isOpen, onClose, postId, reportedBy }) => {
+const ReportForm = ({ isOpen, onClose, postId, commentId, reportedBy }) => {
   const [reportReason, setReportReason] = useState('');
   const toast = useToast();
 
-  // Handle report submission
-  const handleReport = async () => {
+  // Handle post report submission
+  const handlePostReport = async () => {
     try {
       const response = await fetch(`http://localhost:8080/reports`, {
         method: 'POST',
@@ -31,7 +31,7 @@ const ReportForm = ({ isOpen, onClose, postId, reportedBy }) => {
       });
       if (response.ok) {
         toast({
-          title: "Report submitted successfully.",
+          title: "Post report submitted successfully.",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -39,10 +39,48 @@ const ReportForm = ({ isOpen, onClose, postId, reportedBy }) => {
         setReportReason(''); // Reset reason after submission
         onClose(); // Close modal
       } else {
-        console.error('Failed to submit report');
+        console.error('Failed to submit post report');
       }
     } catch (err) {
-      console.error("Error submitting report:", err);
+      console.error("Error submitting post report:", err);
+    }
+  };
+
+  // Handle comment report submission
+  const handleCommentReport = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/reportComment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comment_id: commentId,
+          reported_by: reportedBy,
+          reason: reportReason,
+        }),
+      });
+      if (response.ok) {
+        toast({
+          title: "Comment report submitted successfully.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setReportReason(''); // Reset reason after submission
+        onClose(); // Close modal
+      } else {
+        console.error('Failed to submit comment report');
+      }
+    } catch (err) {
+      console.error("Error submitting comment report:", err);
+    }
+  };
+
+  // Determine which function to call based on the presence of postId or commentId
+  const handleReport = () => {
+    if (commentId) {
+      handleCommentReport();
+    } else if (postId) {
+      handlePostReport();
     }
   };
 
@@ -50,10 +88,10 @@ const ReportForm = ({ isOpen, onClose, postId, reportedBy }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Report Post</ModalHeader>
+        <ModalHeader>{commentId ? "Report Comment" : "Report Post"}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text>Are you sure you want to report this post?</Text>
+          <Text>Are you sure you want to report this {commentId ? "comment" : "post"}?</Text>
           <Textarea
             placeholder="Enter reason for reporting"
             value={reportReason}
