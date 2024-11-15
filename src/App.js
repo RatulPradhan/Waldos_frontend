@@ -44,10 +44,10 @@ function App() {
 				<Routes>
 					<Route path="/"     element={ login ? (<Home userData={userData[0]} />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]} />)} />
 					<Route path="/home" element={ login ? (<Home userData={userData[0]} userRole={userData[0].user_type} />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]} />)} />
-					<Route path="/post" element={ <PostForm userId={userData[0].user_id} username={userData[0].username} />}/>
+					<Route path="/post" element={ <PostForm userId={userData[0].user_id} username={userData[0].username} profile_picture={userData[0].profile_picture} />}/>
 					<Route
 						path="/post/:post_id"
-						element={<PostDetails userId={userData[0].user_id} />}
+						element={<PostDetails userId={userData[0].user_id } />}
 
 					/>
 					<Route path="/post" element={login ? <PostForm userId={userData[0].user_id} username={userData[0].username} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
