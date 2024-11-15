@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import Post from "../Post/Post";
 import EventsSection from "../EventsSection/EventsSection";
 
-const Home = ({ userData }) => {
+const Home = ({ userData, userRole }) => {
 	const navigate = useNavigate();
 
 	const [posts, setPosts] = useState([]);
@@ -122,6 +122,7 @@ const Home = ({ userData }) => {
 									  userId={userData.user_id} 
 									  onDelete={handleDelete}
 									  onUpdate={handleUpdate} 
+									  userRole={userRole}
 								/> // pass the props the post component
 							))
 						) : (
