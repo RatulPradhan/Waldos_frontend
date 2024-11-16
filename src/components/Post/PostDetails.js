@@ -7,14 +7,16 @@ import CommentForm from "../Comment/CommentForm";
 import Sidebar from "../Navbar/Sidebar";
 
 const PostDetails = ({ userId }) => {
-  const { post_id } = useParams();
-  const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
 
+  const { post_id } = useParams();  
+  const [post, setPost] = useState(null);  
+  const [comments, setComments] = useState([]);  
+  
+  
   const handleCommentUpdate = (commentId, newContent) => {
-    setComments((prevComments) => {
+    setComments(prevComments => {
       const updateContent = (commentsList) => {
-        return commentsList.map((comment) => {
+        return commentsList.map(comment => {
           if (comment.comment_id === commentId) {
             return { ...comment, content: newContent };
           } else if (comment.replies) {
@@ -26,6 +28,7 @@ const PostDetails = ({ userId }) => {
       return updateContent(prevComments);
     });
   };
+
 
   useEffect(() => {
     const fetchPostWithComments = async () => {
@@ -47,7 +50,7 @@ const PostDetails = ({ userId }) => {
   // update comments when a new one is submitted (?)
   // const handleNewComment = (newComment) => {
   //   setComments([...comments, newComment]);
-  //   setTotalComments(totalComments + 1);
+  //   setTotalComments(totalComments + 1); 
   // };
 
   // fix it so that i update the reply section as well
@@ -55,29 +58,30 @@ const PostDetails = ({ userId }) => {
   const handleNewComment = (newComment) => {
     // Helper function to recursively find the correct parent and add the reply
     const addReplyToComment = (commentsList) => {
-      return commentsList.map((comment) => {
+      return commentsList.map(comment => {
         // Check if this is the correct parent
         if (comment.comment_id === newComment.parent_id) {
           return {
             ...comment,
-            replies: [...(comment.replies || []), newComment],
+            replies: [...(comment.replies || []), newComment]
           };
-        }
+        } 
         // If not, check if this comment has replies and recurse
         else if (comment.replies) {
           return {
             ...comment,
-            replies: addReplyToComment(comment.replies),
+            replies: addReplyToComment(comment.replies)
           };
         }
         return comment;
       });
     };
-
+  
     // Check if it's a reply or a top-level comment
     if (newComment.parent_id) {
       // Update nested replies
-      setComments((prevComments) => addReplyToComment(prevComments));
+      setComments(prevComments => addReplyToComment(prevComments));
+
     } else {
       // Add as a new top-level comment
       setComments((prevComments) => [...prevComments, newComment]);
@@ -86,25 +90,22 @@ const PostDetails = ({ userId }) => {
 
   return (
     <Box p="5">
-      {post && <Post post={post} />}
+      {post && (
+        <Post post={post} />
+      )}
 
-      <CommentForm
-        post_id={post_id}
-        userId={userId}
-        onCommentSubmit={handleNewComment}
-      />
+       <CommentForm post_id={post_id} userId={userId} onCommentSubmit={handleNewComment} />
 
       {/* Comments section */}
       <VStack align="stretch" spacing={4}>
-        {comments.map((comment) => (
-          <Comment
-            key={comment.comment_id}
-            comment={comment}
-            post_id={post_id}
-            userId={userId}
-            onCommentSubmit={handleNewComment}
-            onUpdate={handleCommentUpdate}
-          />
+        {comments.map(comment => (
+          <Comment 
+          key={comment.comment_id} 
+          comment={comment} 
+          post_id={post_id} 
+          userId={userId} 
+          onCommentSubmit={handleNewComment}
+          onUpdate={handleCommentUpdate} />
         ))}
       </VStack>
     </Box>

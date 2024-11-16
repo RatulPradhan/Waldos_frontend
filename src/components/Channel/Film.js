@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import Post from "../Post/Post";
 import EventsSection from "../EventsSection/EventsSection";
 
-const Film = ({ userData }) => {
+const Film = ({ userData, userRole }) => {
 	const navigate = useNavigate();
 
 	const [posts, setPosts] = useState([]);
@@ -101,31 +101,32 @@ const Film = ({ userData }) => {
           </Flex>
         </Box>
 
-        {/* New Posts / Activities */}
-        <Flex justify="space-between">
-          {/* Activity Feed */}
-          <Box w="65%" bg="#F6DEB5" shadow="sm" rounded="md" p="4">
-            <Flex justify="space-between" mb="3">
-              <Text fontWeight="bold">Newest activities</Text>
-              <Text color="gray.500" cursor="pointer">
-                New posts
-              </Text>
-            </Flex>
-            {/* Render posts */}
-            {posts.length > 0 ? (
-              posts.map((post) => (
-                <Post
-                  key={post.post_id}
-                  post={post}
-                  userId={userData.user_id}
-                  onDelete={handleDelete}
-                  onUpdate={handleUpdate}
-                /> // pass the props the post component
-              ))
-            ) : (
-              <Text>No posts available yet</Text>
-            )}
-          </Box>
+				{/* New Posts / Activities */}
+				<Flex justify="space-between">
+					{/* Activity Feed */}
+					<Box w="65%" bg="#F6DEB5" shadow="sm" rounded="md" p="4">
+						<Flex justify="space-between" mb="3">
+							<Text fontWeight="bold">Newest activities</Text>
+							<Text color="gray.500" cursor="pointer">
+								New posts
+							</Text>
+						</Flex>
+						{/* Render posts */}
+						{posts.length > 0 ? (
+							posts.map((post) => (
+								<Post key={post.post_id} 
+								      post={post} 
+									    userId={userData.user_id} 
+									    onDelete={handleDelete}
+									    onUpdate={handleUpdate} 
+										userRole={userRole}
+								/> // pass the props the post component
+							))
+						) : (
+							<Text>No posts available yet</Text>
+						)}
+					</Box>
+
 
           {/* Upcoming Events */}
           <EventsSection />
