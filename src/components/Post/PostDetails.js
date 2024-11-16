@@ -1,10 +1,9 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Box, VStack, Flex, Heading, Divider, Text } from "@chakra-ui/react";
-import Comment from "../Comment/Comment";
-import Post from "./Post";
-import CommentForm from "../Comment/CommentForm";
-import Sidebar from "../Navbar/Sidebar";
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Box, VStack } from "@chakra-ui/react";
+import Comment from '../Comment/Comment';
+import Post from './Post'; 
+import CommentForm from '../Comment/CommentForm';
 
 const PostDetails = ({ userId }) => {
   const { post_id } = useParams();  
@@ -28,15 +27,12 @@ const PostDetails = ({ userId }) => {
     });
   };
 
-
   useEffect(() => {
     const fetchPostWithComments = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8080/posts/${post_id}/comments`
-        );
+        const response = await fetch(`http://localhost:8080/posts/${post_id}/comments`);
         const data = await response.json();
-        setPost(data.post);
+        setPost(data.post);  
         setComments(data.comments || []);
       } catch (error) {
         console.error("Error fetching post with comments:", error);
@@ -108,8 +104,10 @@ const PostDetails = ({ userId }) => {
         ))}
       </VStack>
     </Box>
-
   );
 };
 
 export default PostDetails;
+
+
+

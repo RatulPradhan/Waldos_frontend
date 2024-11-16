@@ -35,24 +35,25 @@ const Home = ({ userData, userRole }) => {
 
 	// for updating and deleting the post section
 	const handleDelete = (postId) => {
-		setPosts((prevPosts) => prevPosts.filter((post) => post.post_id !== postId));
-	};
-	
-	// update post
-	const handleUpdate = (postId, title, content) => {
 		setPosts((prevPosts) =>
-		  prevPosts.map((post) =>
-			post.post_id === postId ? { ...post, title, content } : post
-		  )
+			prevPosts.filter((post) => post.post_id !== postId)
 		);
 	};
 
-	console.log(userData)
-	
+	// update post
+	const handleUpdate = (postId, title, content) => {
+		setPosts((prevPosts) =>
+			prevPosts.map((post) =>
+				post.post_id === postId ? { ...post, title, content } : post
+			)
+		);
+	};
+
+	console.log(userData);
 
 	return (
 		<Flex height="100vh">
-			<Sidebar userType={userData.user_type}/>
+			<Sidebar userType={userData.user_type} />
 			{/* Main Content */}
 			<Box flex="1" p="5" height="100%" overflowY="auto">
 				{/* Header */}
@@ -117,12 +118,14 @@ const Home = ({ userData, userRole }) => {
 						{/* Render posts */}
 						{posts.length > 0 ? (
 							posts.map((post) => (
-								<Post key={post.post_id} 
-								      post={post} 
-									  userId={userData.user_id} 
-									  onDelete={handleDelete}
-									  onUpdate={handleUpdate} 
-									  userRole={userRole}
+								<Post
+									key={post.post_id}
+									post={post}
+									userId={userData.user_id}
+									onDelete={handleDelete}
+									onUpdate={handleUpdate}
+									userRole={userRole}
+									profile_picture={userData.profile_picture}
 								/> // pass the props the post component
 							))
 						) : (
