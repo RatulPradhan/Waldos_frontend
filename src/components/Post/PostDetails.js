@@ -10,7 +10,22 @@ const PostDetails = ({ userId }) => {
   const { post_id } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [totalComments, setTotalComments] = useState(0);
+
+  const handleCommentUpdate = (commentId, newContent) => {
+    setComments((prevComments) => {
+      const updateContent = (commentsList) => {
+        return commentsList.map((comment) => {
+          if (comment.comment_id === commentId) {
+            return { ...comment, content: newContent };
+          } else if (comment.replies) {
+            return { ...comment, replies: updateContent(comment.replies) };
+          }
+          return comment;
+        });
+      };
+      return updateContent(prevComments);
+    });
+  };
 
   useEffect(() => {
     const fetchPostWithComments = async () => {
@@ -29,63 +44,70 @@ const PostDetails = ({ userId }) => {
     fetchPostWithComments();
   }, [post_id]);
 
+  // update comments when a new one is submitted (?)
+  // const handleNewComment = (newComment) => {
+  //   setComments([...comments, newComment]);
+  //   setTotalComments(totalComments + 1);
+  // };
+
+  // fix it so that i update the reply section as well
+  // update comments when a new one is submitted
   const handleNewComment = (newComment) => {
-    setComments([...comments, newComment]);
-    setTotalComments(totalComments + 1);
+    // Helper function to recursively find the correct parent and add the reply
+    const addReplyToComment = (commentsList) => {
+      return commentsList.map((comment) => {
+        // Check if this is the correct parent
+        if (comment.comment_id === newComment.parent_id) {
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), newComment],
+          };
+        }
+        // If not, check if this comment has replies and recurse
+        else if (comment.replies) {
+          return {
+            ...comment,
+            replies: addReplyToComment(comment.replies),
+          };
+        }
+        return comment;
+      });
+    };
+
+    // Check if it's a reply or a top-level comment
+    if (newComment.parent_id) {
+      // Update nested replies
+      setComments((prevComments) => addReplyToComment(prevComments));
+    } else {
+      // Add as a new top-level comment
+      setComments((prevComments) => [...prevComments, newComment]);
+    }
   };
 
   return (
-    <Flex justify="center" mt={4}>
-      <Box
-        width={{ base: "90%", md: "80%", lg: "70%" }}
-        bg="white"
-        p={6}
-        borderRadius="md"
-        boxShadow="lg"
-      >
-        {post && (
-          <Box mb={6}>
-            <Heading as="h2" size="xl" mb={4} color="gray.800">
-              Post Details
-            </Heading>
-            <Post post={post} />
-            <Divider my={6} borderColor="gray.300" />
-          </Box>
-        )}
+    <Box p="5">
+      {post && <Post post={post} />}
 
-        <Heading as="h3" size="lg" mb={4} color="gray.700">
-          Comments ({comments.length})
-        </Heading>
-        <CommentForm
-          post_id={post_id}
-          userId={userId}
-          onCommentSubmit={handleNewComment}
-        />
+      <CommentForm
+        post_id={post_id}
+        userId={userId}
+        onCommentSubmit={handleNewComment}
+      />
 
-        <VStack
-          align="stretch"
-          spacing={4}
-          mt={4}
-          overflowY="auto"
-          maxH="500px"
-        >
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <Comment
-                key={comment.comment_id}
-                comment={comment}
-                post_id={post_id}
-                userId={userId}
-              />
-            ))
-          ) : (
-            <Text color="gray.500" textAlign="center">
-              No comments yet. Be the first to comment!
-            </Text>
-          )}
-        </VStack>
-      </Box>
-    </Flex>
+      {/* Comments section */}
+      <VStack align="stretch" spacing={4}>
+        {comments.map((comment) => (
+          <Comment
+            key={comment.comment_id}
+            comment={comment}
+            post_id={post_id}
+            userId={userId}
+            onCommentSubmit={handleNewComment}
+            onUpdate={handleCommentUpdate}
+          />
+        ))}
+      </VStack>
+    </Box>
   );
 };
 
