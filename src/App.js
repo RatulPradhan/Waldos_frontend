@@ -1,6 +1,7 @@
 import "./App.css";
 import LoginPrompt from "./components/Pre-Login/LoginPrompt";
 import ProfilePage from "./components/Profile/ProfilePage";
+import UserProfilePage from "./components/Profile/UserProfilePage";
 import Notifications from "./components/Notifications/Notifications";
 import Home from "./components/Home/Home";
 import PostForm from "./components/Post/PostForm";
@@ -56,6 +57,7 @@ function App() {
 					<Route path="/printmaking" element={login ? <Printmaking userData={userData[0]} userRole={userData[0].user_type} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/film" element={login ? <Film userData={userData[0]} userRole={userData[0].user_type}  /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/profile" element={login ? <ProfilePage userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/profile/:user_id" element={<UserProfilePage />} />
 					<Route path="/notifications" element={login ? <Notifications userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/admin-tools" element={login ? <AdminTools userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} /> 
 				

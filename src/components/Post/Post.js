@@ -128,6 +128,11 @@ const Post = ({
 	//update report form
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
+	// go to user profile
+	const goToUserProfile = (user_id) => {
+		navigate(`/profile/${user_id}`);
+	};
+
 	return (
 		<Box bg="gray.100" p="4" rounded="md" mb="4" position="relative">
 			<Menu>
@@ -164,6 +169,7 @@ const Post = ({
 
 			{/* Post Header */}
 			<HStack align="center" mb="4">
+				{/* <Link to={`/user/${post.user_id}/bio`}>  */}
 				<Avatar
 					size="md"
 					src={
@@ -171,8 +177,17 @@ const Post = ({
 							? `${process.env.PUBLIC_URL}/images/profile_pictures/${post.profile_picture}`
 							: undefined
 					}
-				/>
-				<Text fontWeight="bold">{post.username}</Text>
+					cursor="pointer"
+					_hover={{ boxShadow: "lg" }}
+					onClick={() => goToUserProfile(post.user_id)}
+				/> 
+				{/* </Link> */}
+				<Text 
+					fontWeight="bold"
+					onClick={() => goToUserProfile(post.user_id)}
+				>
+					{post.username}
+				</Text>
 			</HStack>
 
 			{isEditing ? (

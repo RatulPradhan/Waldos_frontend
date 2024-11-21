@@ -15,7 +15,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-export default function Sidebar({userType}) {
+export default function Sidebar({userType, userId}) {
   const isAdmin = userType === "admin";
   return (
     <Box
