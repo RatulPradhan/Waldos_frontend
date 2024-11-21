@@ -1,4 +1,3 @@
-// src/components/Like/LikeList.js
 import React from 'react';
 import {
   Modal,

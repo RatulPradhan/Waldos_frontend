@@ -53,7 +53,7 @@ const Home = ({ userData, userRole }) => {
 
 	return (
 		<Flex height="100vh">
-			<Sidebar userType={userData.user_type} />
+			<Sidebar userType={userData.user_type} userId={userData.user_id} />
 			{/* Main Content */}
 			<Box flex="1" p="5" height="100%" overflowY="auto">
 				{/* Header */}
