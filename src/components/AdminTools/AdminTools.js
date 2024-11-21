@@ -14,9 +14,9 @@ import Sidebar from "../Navbar/Sidebar";
 import CreateAnnouncement from "../Notifications/CreateAnnouncement";
 import CreateEvent from "../Notifications/CreateEvent"
 import ReportReview from "./ReportReview";
+import CreateUserAccount from "./CreateUserAccount";
 
 const AdminTools = ({ userData }) => {
-  // const [userToBan, setUserToBan] = useState("");
   const [bannedUsers, setBannedUsers] = useState([]);
   const [unbannedUsers, setUnbannedUsers] = useState([]);
   const toast = useToast();
@@ -34,11 +34,15 @@ const AdminTools = ({ userData }) => {
     fetch(`http://localhost:8080/unbanned_users`)
       .then((response) => response.json())
       .then((data) => {
-        const emails = data.map((userEmail) => userEmail.email);
+        const emails = data
+          .map((userEmail) => userEmail.email)
+          .filter((email) => email !== userData.email); // Exclude userData.email
         setUnbannedUsers(emails);
+      })
+      .catch((error) => {
+        console.error("Error fetching unbanned users:", error);
       });
-  }, []);
-
+  }, [userData.email]); // Add userData.email as a dependency if needed
 
   const handleBanUser = async (userToBan) => {
     if (userToBan) {
@@ -63,11 +67,13 @@ const AdminTools = ({ userData }) => {
         });
 
         if (!response.ok) {
-          throw new Error(`Failed to ban user: ${response.statusText}` );
+          throw new Error(`Failed to ban user: ${response.statusText}`);
         }
 
         // If ban was successful, update the banned users list and clear the input
-        setUnbannedUsers(unbannedUsers.filter((unbannedUser) => unbannedUser !== userToBan));
+        setUnbannedUsers(
+          unbannedUsers.filter((unbannedUser) => unbannedUser !== userToBan)
+        );
         setBannedUsers([...bannedUsers, userToBan]);
         // setUserToBan(""); // Clear input
         toast({
@@ -95,7 +101,6 @@ const AdminTools = ({ userData }) => {
       });
     }
   };
-
 
   const handleUnbanUser = async (user) => {
     try {
@@ -164,7 +169,16 @@ const AdminTools = ({ userData }) => {
             </Text>
             <CreateEvent />
           </Box>
-
+          <Box
+            bg="#E1CBAA"
+            borderRadius="md"
+            boxShadow="md"
+            p={4}
+            border="1px"
+            borderColor="#d69b75"
+          >
+            <CreateUserAccount />
+          </Box>
           {/* Ban Users Section */}
           <Box
             bg="#E1CBAA"

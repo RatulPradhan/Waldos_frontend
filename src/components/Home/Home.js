@@ -3,7 +3,6 @@ import {
 	Flex,
 	Text,
 	Button,
-	VStack,
 	HStack,
 	Avatar,
 } from "@chakra-ui/react";

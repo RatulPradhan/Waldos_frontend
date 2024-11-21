@@ -53,13 +53,13 @@ function App() {
 					/>
 					<Route path="/post" element={login ? <PostForm userId={userData[0].user_id} username={userData[0].username} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
 					<Route path="/post/:post_id" element={login ? <PostDetails userId={userData[0].user_id} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)}/>
-					<Route path="/ceramic" element={login ? <Ceramic userData={userData[0]} userRole={userData[0].user_type}/> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
-					<Route path="/printmaking" element={login ? <Printmaking userData={userData[0]} userRole={userData[0].user_type} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
-					<Route path="/film" element={login ? <Film userData={userData[0]} userRole={userData[0].user_type}  /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/ceramic" element={login ? <Ceramic userData={userData[0]} userRole={userData[0].user_type} channel_id={2}/> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/printmaking" element={login ? <Printmaking userData={userData[0]} userRole={userData[0].user_type} channel_id={3}/> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
+					<Route path="/film" element={login ? <Film userData={userData[0]} userRole={userData[0].user_type}  channel_id={4}/> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/profile" element={login ? <ProfilePage userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
 					<Route path="/profile/:user_id" element={<UserProfilePage />} />
 					<Route path="/notifications" element={login ? <Notifications userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} />
-					<Route path="/admin-tools" element={login ? <AdminTools userData={userData[0]} /> : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} /> 
+					<Route path="/admin-tools" element={login ? (userData[0].user_type === 'admin' ? <AdminTools userData={userData[0]} /> : <Home userData={userData[0]} />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]}/>)} /> 
 				
 				</Routes>
 			</Layout>

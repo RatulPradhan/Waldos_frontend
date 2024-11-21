@@ -3,7 +3,6 @@ import {
   VStack,
   Text,
   Input,
-  Textarea,
   Button,
   HStack,
   useToast,
@@ -12,7 +11,7 @@ import { useState } from "react";
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
+  const [eventURL, setEventURL] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
@@ -20,7 +19,14 @@ const CreateEvent = () => {
   const toast = useToast();
 
   const handleCreateEvent = async () => {
-    if (!eventName || !eventDate || !eventTime || !eventEndDate || !eventEndTime) {
+    if (
+      !eventName ||
+      !eventURL ||
+      !eventDate ||
+      !eventTime ||
+      !eventEndDate ||
+      !eventEndTime
+    ) {
       toast({
         title: "Missing information",
         description: "Please fill in all the required fields.",
@@ -43,7 +49,7 @@ const CreateEvent = () => {
         },
         body: JSON.stringify({
           name: eventName,
-          description: eventDescription,
+          url: eventURL,
           event_at: eventDateTime.toISOString(), // Format as an ISO string
           event_end_at: eventEndDateTime.toISOString(),
         }),
@@ -62,7 +68,7 @@ const CreateEvent = () => {
 
         // Clear input fields after successful event creation
         setEventName("");
-        setEventDescription("");
+        setEventURL("");
         setEventDate("");
         setEventTime("");
         setEventEndDate("");
@@ -82,7 +88,6 @@ const CreateEvent = () => {
     }
   };
 
-
   return (
     <Box
       bg="#E1CBAA"
@@ -101,10 +106,10 @@ const CreateEvent = () => {
           value={eventName}
           onChange={(e) => setEventName(e.target.value)}
         />
-        <Textarea
-          placeholder="Event Description"
-          value={eventDescription}
-          onChange={(e) => setEventDescription(e.target.value)}
+        <Input
+          placeholder="Event URL"
+          value={eventURL}
+          onChange={(e) => setEventURL(e.target.value)}
         />
         <Text>Event Start</Text>
         <HStack>

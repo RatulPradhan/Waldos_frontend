@@ -12,42 +12,43 @@ import { useState, useEffect } from "react";
 import Post from "../Post/Post";
 import EventsSection from "../EventsSection/EventsSection";
 
-const Film = ({ userData, userRole }) => {
-	const navigate = useNavigate();
+const Film = ({ userData, userRole, channel_id }) => {
+  const navigate = useNavigate();
 
-	const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-	useEffect(() => {
-		// Fetch posts from the backend
-		const fetchPosts = async () => {
-			try {
-				const response = await fetch("http://localhost:8080/film");
-				const data = await response.json();
-				setPosts(data);
-			} catch (error) {
-				console.error("Error fetching posts:", error);
-			}
-		};
+  useEffect(() => {
+    // Fetch posts from the backend
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/film");
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
 
-		fetchPosts();
-	}, []);
+    fetchPosts();
+  }, []);
 
-	// for updating and deleting the post section
-	const handleDelete = (postId) => {
-		setPosts((prevPosts) => prevPosts.filter((post) => post.post_id !== postId));
-	};
-	
-	// update post
-	const handleUpdate = (postId, title, content) => {
-		setPosts((prevPosts) =>
-		  prevPosts.map((post) =>
-			post.post_id === postId ? { ...post, title, content } : post
-		  )
-		);
-	};
-	
+  // for updating and deleting the post section
+  const handleDelete = (postId) => {
+    setPosts((prevPosts) =>
+      prevPosts.filter((post) => post.post_id !== postId)
+    );
+  };
 
-	return (
+  // update post
+  const handleUpdate = (postId, title, content) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.post_id === postId ? { ...post, title, content } : post
+      )
+    );
+  };
+
+  return (
     <Flex height="100vh">
       <Sidebar userType={userData.user_type} />
       {/* Main Content */}
@@ -101,32 +102,32 @@ const Film = ({ userData, userRole }) => {
           </Flex>
         </Box>
 
-				{/* New Posts / Activities */}
-				<Flex justify="space-between">
-					{/* Activity Feed */}
-					<Box w="65%" bg="#F6DEB5" shadow="sm" rounded="md" p="4">
-						<Flex justify="space-between" mb="3">
-							<Text fontWeight="bold">Newest activities</Text>
-							<Text color="gray.500" cursor="pointer">
-								New posts
-							</Text>
-						</Flex>
-						{/* Render posts */}
-						{posts.length > 0 ? (
-							posts.map((post) => (
-								<Post key={post.post_id} 
-								      post={post} 
-									    userId={userData.user_id} 
-									    onDelete={handleDelete}
-									    onUpdate={handleUpdate} 
-										userRole={userRole}
-								/> // pass the props the post component
-							))
-						) : (
-							<Text>No posts available yet</Text>
-						)}
-					</Box>
-
+        {/* New Posts / Activities */}
+        <Flex justify="space-between">
+          {/* Activity Feed */}
+          <Box w="65%" bg="#F6DEB5" shadow="sm" rounded="md" p="4">
+            <Flex justify="space-between" mb="3">
+              <Text fontWeight="bold">Newest activities</Text>
+              <Text color="gray.500" cursor="pointer">
+                New posts
+              </Text>
+            </Flex>
+            {/* Render posts */}
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <Post
+                  key={post.post_id}
+                  post={post}
+                  userId={userData.user_id}
+                  onDelete={handleDelete}
+                  onUpdate={handleUpdate}
+                  userRole={userRole}
+                /> // pass the props the post component
+              ))
+            ) : (
+              <Text>No posts available yet</Text>
+            )}
+          </Box>
 
           {/* Upcoming Events */}
           <EventsSection />
