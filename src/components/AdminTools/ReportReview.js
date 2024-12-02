@@ -1,6 +1,7 @@
 // AdminReview.js
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Table,
@@ -27,6 +28,7 @@ const fetchReportedComments = async () => {
 };
 
 const ReportReview = () => {
+	const navigate = useNavigate();
   const [reportedComments, setReportedComments] = useState([]);
 
   useEffect(() => {
@@ -38,6 +40,10 @@ const ReportReview = () => {
 
     getReportedComments();
   }, []);
+
+  const goToPostDetails = (post_id) => {
+    navigate(`/post/${post_id}`);
+  };
 
   return (
     <Box
@@ -55,7 +61,7 @@ const ReportReview = () => {
         <Table variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
-              <Th>Post ID</Th>
+              <Th>Post</Th>
               <Th>Reported By</Th>
               <Th>Reason</Th>
               <Th>Reported At</Th>
@@ -66,7 +72,13 @@ const ReportReview = () => {
             {reportedComments.length > 0 ? (
               reportedComments.map((report) => (
                 <Tr key={report.report_id}>
-                  <Td>{report.post_id}</Td>
+                  <Td
+                    onClick={() => goToPostDetails(report.post_id)}
+                    color="blue.500" // Makes the text blue
+                    _hover={{ cursor: "pointer", color: "blue.600" }} // Changes cursor and hover color
+                  >
+                    {"Click"}
+                  </Td>
                   <Td>{report.reported_by}</Td>
                   <Td>{report.reason || "N/A"}</Td>
                   <Td>{new Date(report.created_at).toLocaleString()}</Td>
