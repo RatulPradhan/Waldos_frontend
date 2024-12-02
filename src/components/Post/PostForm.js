@@ -54,6 +54,16 @@ const PostForm = ({ userId, username, profile_picture }) => {
 					duration: 5000,
 					isClosable: true,
 				});
+				const email = await fetch(
+					"http://localhost:8080/send-following-emails",
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ channelId, username, content }),
+					}
+				);
 				navigate("/home");
 			} else {
 				toast({

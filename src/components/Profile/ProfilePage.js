@@ -33,7 +33,7 @@ const ProfilePage = () => {
 				/>
 				<Flex>
 					<Box flex="2" mr="5">
-						<BioSection userData />
+						<BioSection user_id={userData.user_id} />
 					</Box>
 					<Box
 						w="80%"

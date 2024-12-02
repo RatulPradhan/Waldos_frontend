@@ -63,7 +63,7 @@ const UserProfilePage = () => {
 						p="6"
 						mb="3"
 						rounded="md"
-						bgImage="/images/wallpaper2.jpg"
+						bgImage="/images/Header.png"
 						bgSize="cover"
 						bgPos="top"
 						height="175px"

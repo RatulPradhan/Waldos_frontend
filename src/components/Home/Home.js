@@ -60,7 +60,7 @@ const Home = ({ userData, userRole }) => {
 						p="6"
 						mb="3"
 						rounded="md"
-						bgImage="/images/wallpaper2.jpg"
+						bgImage="/images/Header.png"
 						bgSize="cover"
 						bgPos="top"
 						height="150px"
@@ -68,7 +68,7 @@ const Home = ({ userData, userRole }) => {
 					<Box padding="0px 25px">
 						<HStack>
 							<img
-								src="/images/community-icon.png"
+								src="/images/waldoLogo.png"
 								width="75"
 								alt="Community Icon"
 							/>
@@ -85,7 +85,15 @@ const Home = ({ userData, userRole }) => {
 				{/* Post Box */}
 				<Box mb="6" p="4" bg="#F6DEB5" shadow="sm" rounded="md">
 					<Flex align="center">
-						<Avatar size="md" mr="4" />
+						<Avatar
+							size="md"
+							mr="4"
+							src={
+								userData.profile_picture
+									? `${process.env.PUBLIC_URL}/images/profile_pictures/${userData.profile_picture}`
+									: undefined
+							}
+						/>
 						<Button
 							w="full"
 							colorScheme="orange"

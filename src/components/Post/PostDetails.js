@@ -73,7 +73,6 @@ const PostDetails = ({ userId }) => {
 			});
 		};
 
-
 		// Check if it's a reply or a top-level comment
 		if (newComment.parent_id) {
 			// Update nested replies
@@ -86,14 +85,13 @@ const PostDetails = ({ userId }) => {
 
 	return (
 		<Box p="5">
-			{post && <Post post={post} />}
+			{post && <Post post={post} userId={userId} />}
 
 			<CommentForm
 				post_id={post_id}
 				userId={userId}
 				onCommentSubmit={handleNewComment}
 			/>
-
 
 			{/* Comments section */}
 			<VStack align="stretch" spacing={4}>
