@@ -17,6 +17,7 @@ const UserProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     // Fetch user data based on user_id
     fetch(`http://localhost:8080/user/id/${user_id}`)
@@ -51,6 +52,7 @@ const UserProfilePage = () => {
       </Flex>
     );
   }
+
 
   return (
     <Flex height="100vh">

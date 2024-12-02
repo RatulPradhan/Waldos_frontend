@@ -12,6 +12,7 @@ import {
 	MenuItem,
 	MenuList,
 	useDisclosure,
+	useToast,
 } from "@chakra-ui/react";
 import { FiMoreHorizontal } from "react-icons/fi"; // Import the icon for the menu button
 import React, { useState, useEffect, useCallback } from "react"; // Import useState from React
@@ -27,8 +28,9 @@ const Post = ({
 	userRole,
 	profile_picture,
 }) => {
-	// random like for now
+	
 	const navigate = useNavigate();
+	const toast = useToast(); 
 
 	// like related things
 	const [likeCount, setLikeCount] = useState(post.like_count || 0);
@@ -65,9 +67,33 @@ const Post = ({
 		}
 	};
 
+	const handleUnlikePost = async () => {
+		const response = await fetch(`http://localhost:8080/api/unlikePost`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ post_id: post.post_id, user_id: userId }),
+		});
+	
+		if (response.ok) {
+			await fetchLikes(); // Refresh the like count and liked users
+		} else {
+			console.error("Failed to unlike post");
+		}
+	};
+
+	const handleLikeToggle = async () => {
+		if (likedByUsers.some(user => user.user_id === userId)) {
+			await handleUnlikePost();
+		} else {
+			await handleLikePost();
+		}
+	};
+
 	const goToPostDetails = () => {
 		navigate(`/post/${post.post_id}`);
 	};
+
+	
 
 	// update post section
 	const [isEditing, setIsEditing] = useState(false);
@@ -93,7 +119,13 @@ const Post = ({
 			if (response.ok) {
 				setIsEditing(false);
 				onUpdate(post.post_id, title, content);
-				alert("Post updated successfully");
+				toast({
+				  title: "Post updated.",
+				  description: "Your post has been updated successfully.",
+				  status: "success",
+				  duration: 3000,
+				  isClosable: true,
+				});
 			} else {
 				console.error("Failed to update post");
 			}
@@ -115,8 +147,14 @@ const Post = ({
 			);
 			if (response.ok) {
 				onDelete(post.post_id);
-				alert("Post deleted successfully");
-				navigate("/home");
+        		toast({
+          			title: "Post deleted.",
+          			description: "Your post has been deleted successfully.",
+          			status: "success",
+          			duration: 3000,
+          			isClosable: true,
+        		});
+        		navigate("/home");
 			} else {
 				console.error("Failed to delete post");
 			}
@@ -130,8 +168,13 @@ const Post = ({
 
 	// go to user profile
 	const goToUserProfile = (user_id) => {
-		navigate(`/profile/${user_id}`);
+		if (userId === user_id) {
+		  navigate("/profile"); // Redirect to logged-in user's profile
+		} else {
+		  navigate(`/profile/${user_id}`); // Redirect to other user's profile
+		}
 	};
+
 
 	return (
 		<Box bg="gray.100" p="4" rounded="md" mb="4" position="relative">
@@ -184,6 +227,8 @@ const Post = ({
 				{/* </Link> */}
 				<Text 
 					fontWeight="bold"
+					cursor="pointer"
+					_hover={{ boxShadow: "lg" }}
 					onClick={() => goToUserProfile(post.user_id)}
 				>
 					{post.username}
@@ -210,7 +255,7 @@ const Post = ({
 					<Text fontSize="2xl" fontWeight="bold" mb="2">
 						{post.title}
 					</Text>
-					<Text mb="4">{post.content}</Text>
+					<Text mb="4" whiteSpace="pre-wrap" >{post.content}</Text> 
 				</>
 			)}
 
@@ -218,8 +263,8 @@ const Post = ({
 			<HStack justify="space-between">
 				<HStack>
 					{/* Like Button - Opens LikeList on count click */}
-					<Button size="sm" variant="ghost" onClick={handleLikePost}>
-						❤️ {likeCount}
+					<Button size="sm" variant="ghost" onClick={handleLikeToggle}>
+						{likedByUsers.some(user => user.user_id === userId) ? "💔" : "❤️"} {likeCount}
 					</Button>
 					<Button
 						size="sm"
@@ -241,7 +286,8 @@ const Post = ({
 			<LikeList
 				isOpen={isLikeModalOpen}
 				onClose={() => setLikeModalOpen(false)}
-				likedByUsers={likedByUsers} // Pass likedByUsers directly
+				likedByUsers={likedByUsers} 
+				userId={userId}
 			/>
 
 			{/* Save and Cancel buttons for Edit Mode */}

@@ -15,7 +15,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-export default function Sidebar({userType, userId}) {
+export default function Sidebar({userType, userId }) {
   const isAdmin = userType === "admin";
   return (
     <Box
@@ -39,6 +39,9 @@ export default function Sidebar({userType, userId}) {
             <HStack>
               <FiBell />
               <Text>Notifications</Text>
+              {/* {unreadCount > 0 && (
+                <Badge colorScheme="red">{unreadCount}</Badge>
+              )} */}
             </HStack>
           </Link>
           <Link to="/profile">

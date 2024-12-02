@@ -10,15 +10,19 @@ import {
   MenuList,
   Textarea,
   MenuItem,
-  useDisclosure} 
+  useDisclosure,
+  useToast} 
 from "@chakra-ui/react";
 import { FiMoreHorizontal } from 'react-icons/fi'; 
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
 import CommentForm from './CommentForm'; 
 import ReportForm from '../Post/ReportForm';
 import LikeList from '../Like/LikeList';
 
 const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
+  const navigate = useNavigate();
+  const toast = useToast();
   const [showReplies, setShowReplies] = useState(false);  // toggle replies
   const [replies, setReplies] = useState(comment.replies || []);
   const [showReplyForm, setShowReplyForm] = useState(false); // toggle reply form
@@ -56,6 +60,32 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
     }
   };
 
+  const handleUnlikeComment = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/unlikeComment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comment_id: comment.comment_id, user_id: userId }),
+      });
+
+      if (response.ok) {
+        await fetchLikes(); // Refresh likes after the action
+      } else {
+        console.error("Failed to unlike comment");
+      }
+    } catch (err) {
+      console.error("Error unliking comment:", err);
+    }
+  };
+
+	const handleLikeToggle = async () => {
+		if (likedByUsers.some(user => user.user_id === userId)) {
+			await handleUnlikeComment();
+		} else {
+			await handleLikeComment();
+		}
+	};
+
   // showing the report form
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -92,8 +122,15 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
       });
       if (response.ok) {
         setIsEditing(false);
-        onUpdate(comment.comment_id, editedContent); // Update the comment in the parent component
-        alert('Comment updated successfully');
+        onUpdate(comment.comment_id, editedContent); 
+
+        toast({
+          title: "Comment updated.",
+          description: "Your comment has been successfully updated.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
       } else {
         console.error('Failed to update comment');
       }
@@ -101,6 +138,15 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
       console.error("Error updating comment:", err);
     }
   };
+
+  // go to user profile
+	const goToUserProfile = (user_id) => {
+		if (userId === comment.user_id) {
+		  navigate("/profile"); // Redirect to logged-in user's profile
+		} else {
+		  navigate(`/profile/${user_id}`); // Redirect to other user's profile
+		}
+	};
 
   return (
     <Box bg="gray.100" p="4" rounded="md" mb="4" position="relative">
@@ -137,8 +183,26 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
 
       {/* Comment Header */}
       <HStack align="center" mb="4">
-        <Avatar size="sm" />
-        <Text fontWeight="bold">{comment.username}</Text> {/* Display username */}
+        <Avatar 
+          size="sm" 
+          src={
+						comment.profile_picture
+							? `${process.env.PUBLIC_URL}/images/profile_pictures/${comment.profile_picture}`
+							: undefined
+					}
+					cursor="pointer"
+					_hover={{ boxShadow: "lg" }}
+          onClick={() => goToUserProfile(comment.user_id)}
+        
+        />
+        <Text 
+          fontWeight="bold"
+          cursor="pointer"
+          _hover={{ boxShadow: "lg" }}
+          onClick={() => goToUserProfile(comment.user_id)}
+        >
+          {comment.username}
+        </Text> {/* Display username */}
         <Text fontSize="sm" color="gray.500">
           {new Date(comment.updated_at).toLocaleDateString()}
         </Text>
@@ -165,7 +229,9 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
 
       {/* Like/Reply Buttons */}
       <HStack>
-        <Button size="sm" variant="ghost" onClick={handleLikeComment}>❤️ {likeCount}</Button>
+        <Button size="sm" variant="ghost" onClick={handleLikeToggle}>
+						{likedByUsers.some(user => user.user_id === userId) ? "💔" : "❤️"} {likeCount}
+					</Button>
         <Button size="sm" variant="ghost" onClick={() => setLikeModalOpen(true)}>View Likes</Button>
         <Button size="sm" variant="ghost" onClick={() => setShowReplyForm(!showReplyForm)}>
           Reply
@@ -202,7 +268,8 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
        <LikeList
         isOpen={isLikeModalOpen}
         onClose={() => setLikeModalOpen(false)}
-        likedByUsers={likedByUsers} // Pass likedByUsers directly
+        likedByUsers={likedByUsers} 
+        userId={userId}
       />
     </Box>
   );

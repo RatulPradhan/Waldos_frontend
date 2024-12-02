@@ -83,14 +83,16 @@ const PostDetails = ({ userId }) => {
       setComments((prevComments) => [...prevComments, newComment]);
     }
   };
-
+ 
   return (
     <Box p="5">
       {post && (
-        <Post post={post} />
+        <Post post={post} userId={userId} />
       )}
 
-       <CommentForm post_id={post_id} userId={userId} onCommentSubmit={handleNewComment} />
+      <Box mt="3" mb="3">
+        <CommentForm post_id={post_id} userId={userId} onCommentSubmit={handleNewComment} />
+      </Box>
 
       {/* Comments section */}
       <VStack align="stretch" spacing={4}>
