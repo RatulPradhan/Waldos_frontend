@@ -73,6 +73,7 @@ const PostDetails = ({ userId }) => {
 			});
 		};
 
+
 		// Check if it's a reply or a top-level comment
 		if (newComment.parent_id) {
 			// Update nested replies
@@ -92,6 +93,7 @@ const PostDetails = ({ userId }) => {
 				userId={userId}
 				onCommentSubmit={handleNewComment}
 			/>
+
 
 			{/* Comments section */}
 			<VStack align="stretch" spacing={4}>

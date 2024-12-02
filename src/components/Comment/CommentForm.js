@@ -40,6 +40,14 @@ const CommentForm = ({ post_id, userId, parent_id = null, onCommentSubmit }) => 
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         placeholder={parent_id ? "Write your reply" : "What are your thoughts?"} 
+        bg="gray.50"
+        size="md"
+        borderRadius="md"
+        resize="none"
+        _focus={{
+          borderColor: "blue.400",
+          boxShadow: "outline",
+        }}
       />
       <Button mt="2" onClick={handleSubmit} colorScheme="blue">
         {parent_id ? "Submit Reply" : "Submit Comment"} 

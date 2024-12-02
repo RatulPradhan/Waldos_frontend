@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import AdminTools from "./components/AdminTools/AdminTools";
+// import { NotificationProvider } from "./components/Notifications/NotificationContext";
 
 function App() {
 	const [userData, setUserData] = useState([{}]);
@@ -41,6 +42,7 @@ function App() {
 
 	return (
 		<BrowserRouter>
+		{/* <NotificationProvider userData={userData[0]}> */}
 			<Layout username={userData[0].username || ""}>
 				<Routes>
 					<Route path="/"     element={ login ? (<Home userData={userData[0]} />) : (<LoginPrompt setUser={(email) => setEmail(email)} userData={userData[0]} />)} />
@@ -63,6 +65,7 @@ function App() {
 				
 				</Routes>
 			</Layout>
+		{/* </NotificationProvider> */}
 		</BrowserRouter>
 	);
 }

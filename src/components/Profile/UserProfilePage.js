@@ -56,7 +56,6 @@ const UserProfilePage = () => {
 		<Flex height="100vh">
 			{/* Sidebar */}
 			<Sidebar userType={userData.userRole} />
-
 			<Box flex="1" p="5" height="100%" overflowY="auto">
 				{/* Profile Section */}
 				<Box bg="#F6DEB5" mb="4" rounded="md" height="300px">

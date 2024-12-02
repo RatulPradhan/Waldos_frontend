@@ -4,7 +4,7 @@ import ProfileSection from "../Profile/ProfileSection";
 import BioSection from "../Profile/BioSection";
 import PostsSection from "../Profile/PostsSection";
 import Sidebar from "../Navbar/Sidebar";
-import CreateAnnouncement from "../Notifications/CreateAnnouncement";
+// import CreateAnnouncement from "../Notifications/CreateAnnouncement";
 
 import Post from "../Post/Post";
 
@@ -33,7 +33,7 @@ const ProfilePage = () => {
 				/>
 				<Flex>
 					<Box flex="2" mr="5">
-						<BioSection user_id={userData.user_id} />
+						<BioSection userData />
 					</Box>
 					<Box
 						w="80%"
