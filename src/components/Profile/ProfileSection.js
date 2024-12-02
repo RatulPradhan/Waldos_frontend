@@ -12,7 +12,7 @@ import {
 import "../../styles/ProfileSection.css";
 import React, { useState, useEffect } from "react";
 
-const ProfileSection = ({ profile_picture, user_id }) => {
+const ProfileSection = ({ profile_picture, user_id, updateUserData }) => {
 	const defaultProfilePic = "/images/profile_pictures/avatar.jpg";
 	const [profilePic, setProfilePic] = useState(defaultProfilePic);
 	const [isHovered, setIsHovered] = useState(false);
@@ -68,6 +68,17 @@ const ProfileSection = ({ profile_picture, user_id }) => {
 					}
 					const data = await response.json();
 					console.log("Profile picture uploaded successfully:", data);
+
+					// Update userData in localStorage
+					userData.profile_picture = fileName;
+					window.localStorage.setItem("userData", JSON.stringify(userData));
+					
+					// Update parent component's userData
+					updateUserData(userData);
+
+					// Optionally, force a re-fetch or update the parent component
+					// You might need to call a prop function to notify the parent
+					updateUserData(userData);
 				} catch (error) {
 					console.error("Error uploading profile picture:", error);
 				}

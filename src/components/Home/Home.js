@@ -1,11 +1,4 @@
-import {
-	Box,
-	Flex,
-	Text,
-	Button,
-	HStack,
-	Avatar,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Button, HStack, Avatar } from "@chakra-ui/react";
 import Sidebar from "../Navbar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -124,7 +117,6 @@ const Home = ({ userData, userRole }) => {
 									onDelete={handleDelete}
 									onUpdate={handleUpdate}
 									userRole={userRole}
-									profile_picture={userData.profile_picture}
 								/> // pass the props the post component
 							))
 						) : (

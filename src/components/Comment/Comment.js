@@ -273,6 +273,7 @@ const Comment = ({ comment, userId, post_id, onCommentSubmit, onUpdate }) => {
       />
     </Box>
   );
+
 };
 
 export default Comment;

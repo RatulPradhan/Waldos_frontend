@@ -13,6 +13,7 @@ import {
 	MenuList,
 	useDisclosure,
 	useToast,
+	Image, // Add Image to imports
 } from "@chakra-ui/react";
 import { FiMoreHorizontal } from "react-icons/fi"; // Import the icon for the menu button
 import React, { useState, useEffect, useCallback } from "react"; // Import useState from React
@@ -223,7 +224,7 @@ const Post = ({
 					cursor="pointer"
 					_hover={{ boxShadow: "lg" }}
 					onClick={() => goToUserProfile(post.user_id)}
-				/> 
+				/>
 				{/* </Link> */}
 				<Text 
 					fontWeight="bold"
@@ -255,7 +256,17 @@ const Post = ({
 					<Text fontSize="2xl" fontWeight="bold" mb="2">
 						{post.title}
 					</Text>
-					<Text mb="4" whiteSpace="pre-wrap" >{post.content}</Text> 
+					<Text mb="4">{post.content}</Text>
+					{post.photo_id && (
+						<Image
+							src={`${process.env.PUBLIC_URL}/images/posts/${post.photo_id}`}
+							alt="Post Image"
+							mb="4"
+							maxWidth="500px"
+							maxHeight="500px"
+							objectFit="contain"
+						/>
+					)}
 				</>
 			)}
 
@@ -274,7 +285,7 @@ const Post = ({
 						View Likes
 					</Button>
 					<Button size="sm" variant="ghost" onClick={goToPostDetails}>
-						💬 {post.comment_count || 0}
+						 💬 {post.comment_count || 0}
 					</Button>
 				</HStack>
 				<Text fontSize="sm" color="gray.500">
