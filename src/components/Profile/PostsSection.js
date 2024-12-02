@@ -1,59 +1,78 @@
+// src/components/Profile/PostsSection.js
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import {
+	Box,
+	Flex,
+	Text,
+	VStack,
+	Spinner,
+	Avatar,
+	Heading,
+} from "@chakra-ui/react";
+import Post from "../Post/Post";
 
+const PostsSection = ({ posts, userId, userRole }) => {
+	const [userData, setUserData] = useState(null);
+	const [loading, setLoading] = useState(true);
 
-import { Box, Flex, Image, Text, Heading } from "@chakra-ui/react";
+	useEffect(() => {
+		// Fetch user data based on user_id
+		fetch(`http://localhost:8080/user/id/${userId}`)
+			.then((response) => {
+				if (!response.ok) throw new Error("Failed to fetch user data");
+				return response.json();
+			})
+			.then((data) => {
+				setUserData(data);
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.error("Error fetching user profile:", error);
+				setLoading(false);
+			});
+	}, [userId]);
 
-const PostsSection = () => {
-  return (
-    <Box
-      bg="#F6DEB5"
-      p="20px"
-      borderRadius="10%"
-      color="#6a0202"
-      fontFamily="'Petrona', serif"
-      rounded='md'
-    >
-      <Flex align="flex-start">
-        <Image
-          src="/images/avatar.jpg"
-          alt="Avatar"
-          borderRadius="50%"
-          boxSize="50px"
-          mr="15px"
-        />
-        <Box flexGrow={1}>
-          <Flex justify="space-between" align="center">
-            <Heading
-              as="h5"
-              color="#6a0202"
-              fontSize="1.1rem"
-              fontWeight="bold"
-            >
-              Random Username
-              <Text as="span" color="#d69b75" fontSize="0.9rem" ml="5px">
-                @admin
-              </Text>
-            </Heading>
-            <Text fontSize="1.5rem" color="red" ml="5px">
-              •
-            </Text>
-          </Flex>
-          <Heading
-            as="h6"
-            mt="5px"
-            color="#6a0202"
-            fontSize="1.2rem"
-            fontWeight="bold"
-          >
-            Topic: New events!!
-          </Heading>
-          <Text mt="10px" color="#6a0202" fontSize="1rem">
-            Waldo’s is inviting you to be a part of this art community.
-          </Text>
-        </Box>
-      </Flex>
-    </Box>
-  );
+	if (loading) {
+		return (
+			<Flex justify="center" align="center" height="100vh">
+				<Spinner size="xl" />
+			</Flex>
+		);
+	}
+
+	if (!userData) {
+		return (
+			<Flex justify="center" align="center" height="100vh">
+				<Text fontSize="xl" color="red.500">
+					User not found.
+				</Text>
+			</Flex>
+		);
+	}
+
+	return (
+		<VStack spacing={4} align="stretch">
+			<Box mb={4}>
+				<Text fontSize="1.2rem" color="#6a0202" textAlign="left">
+					Posts ({userData.posts?.length || 0})
+				</Text>
+			</Box>
+			<Box flex="1">
+				{userData.posts?.map((post) => (
+					<Post
+						key={post.post_id}
+						post={post}
+						userId={userData.user_id}
+						onDelete={() => console.log("Delete triggered")}
+						onUpdate={() => console.log("Update triggered")}
+						userRole={userData.userRole}
+						profile_picture={post.profile_picture}
+					/>
+				))}
+			</Box>
+		</VStack>
+	);
 };
 
 export default PostsSection;
-

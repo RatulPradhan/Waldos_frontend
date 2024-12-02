@@ -1,19 +1,36 @@
+import React, { useState, useEffect } from "react";
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
-import React from "react";
 import ProfileSection from "../Profile/ProfileSection";
 import BioSection from "../Profile/BioSection";
 import PostsSection from "../Profile/PostsSection";
 import Sidebar from "../Navbar/Sidebar";
 import CreateAnnouncement from "../Notifications/CreateAnnouncement";
 
-const ProfilePage = ({ userData }) => {
-	const isAdmin =
-		JSON.parse(window.localStorage.getItem("userData")).user_type === "admin";
+import Post from "../Post/Post";
+
+const ProfilePage = () => {
+	const [userData, setUserData] = useState(() => {
+		return JSON.parse(window.localStorage.getItem("userData"));
+	});
+
+	const updateUserData = (newData) => {
+		setUserData(newData);
+		window.localStorage.setItem("userData", JSON.stringify(newData));
+	};
+
+	useEffect(() => {
+		console.log("ProfilePage - userData:", userData);
+	}, [userData]);
+
 	return (
 		<Flex height="100vh">
 			<Sidebar userType={userData.user_type} />
 			<Box flex="1" p="5" height="100%" overflowY="auto">
-				<ProfileSection profile_picture={userData.profile_picture} user_id= {userData.user_id} />
+				<ProfileSection
+					profile_picture={userData.profile_picture}
+					user_id={userData.user_id}
+					updateUserData={updateUserData} // Pass the callback
+				/>
 				<Flex>
 					<Box flex="2" mr="5">
 						<BioSection user_id={userData.user_id} />
@@ -28,15 +45,12 @@ const ProfilePage = ({ userData }) => {
 						borderColor="#d69b75"
 					>
 						<VStack spacing={4} align="stretch">
-							<Box mb={4}>
-								<Text fontSize="1.2rem" color="#6a0202" textAlign="left">
-									Posts (1)
-								</Text>
-							</Box>
 							<Box flex="1">
-								{" "}
-								{/* Changed from flex="8" to flex="1" for proper alignment */}
-								<PostsSection />
+								<PostsSection
+									posts={userData.posts}
+									userId={userData.user_id}
+									userRole={userData.userRole}
+								/>
 							</Box>
 						</VStack>
 					</Box>

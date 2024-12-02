@@ -10,6 +10,7 @@ import {
 	HStack,
 	Avatar,
 	Text,
+	useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,35 +19,60 @@ const PostForm = ({ userId, username, profile_picture }) => {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [channelId, setChannelId] = useState(1); // Default to General channel (channel_id = 1)
+	const [image, setImage] = useState(null);
 	const navigate = useNavigate();
+	const toast = useToast();
 
+	// PostForm.js
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const postData = {
-			user_id: userId,
-			channel_id: channelId,
-			// user_name: username,
-			title,
-			content,
-		};
+		const formData = new FormData();
+		formData.append("user_id", userId);
+		formData.append("channel_id", channelId);
+		formData.append("title", title);
+		formData.append("content", content);
+		if (image) {
+			formData.append("image", image);
+		}
 
+		// Log FormData contents
+		for (let [key, value] of formData.entries()) {
+			console.log(`${key}:`, value);
+		}
 		try {
 			const response = await fetch("http://localhost:8080/posts", {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(postData),
+				body: formData,
 			});
 
 			if (response.ok) {
+				toast({
+					title: "Post created.",
+					description: "Your post has been successfully created.",
+					status: "success",
+					duration: 5000,
+					isClosable: true,
+				});
 				navigate("/home");
 			} else {
-				console.error("Failed to create post");
+				toast({
+					title: "Error.",
+					description: "There was an error creating your post.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
 			}
 		} catch (error) {
 			console.error("Error submitting post:", error);
+			toast({
+				title: "Error.",
+				description: "There was an error creating your post.",
+				status: "error",
+				duration: 5000,
+				isClosable: true,
+			});
 		}
 	};
 
@@ -112,6 +138,17 @@ const PostForm = ({ userId, username, profile_picture }) => {
 							placeholder="Write your post here"
 							size="lg"
 							bg="white"
+						/>
+					</FormControl>
+
+					<FormControl id="image" mb={4}>
+						<FormLabel fontWeight="bold">Upload an image</FormLabel>
+						<Input
+							type="file"
+							accept="image/*"
+							onChange={(e) => setImage(e.target.files[0])}
+							bg="white"
+							size="lg"
 						/>
 					</FormControl>
 
